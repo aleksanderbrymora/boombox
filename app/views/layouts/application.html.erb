@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>V2Boombox</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_pack_tag 'styles', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body>
+  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Boombox</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <%= link_to 'Home', root_path, :class => "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Artists', artists_path, :class => "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Albums', albums_path, :class => "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Albums', albums_path, :class => "nav-link" %>
+        </li>
+        <% if @current_user.present? %>
+          <li class="nav-item">
+              <%= link_to 'Playlist', playlists_path, :class => "nav-link" %>
+          </li>
+        <% end%>
+      </ul>
+      <% if @current_user.present? %>
+        <ul class="nav justify-content-center">
+          <li class="nav-item">
+              <%= link_to 'Sign out', login_path, :method => 'delete' %>
+          </li>
+        </ul>
+      <% else %>
+        <ul class="nav justify-content-center">
+          <li class="nav-item">
+            <%= link_to 'Log in', login_path, :class => 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Sign up", new_user_path, :class => 'btn btn-primary' %>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  </nav>
+  <div class="container">
+    <%= yield %>
+  </div>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</body>
+
+</html>

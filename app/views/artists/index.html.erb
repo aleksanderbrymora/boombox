@@ -1,0 +1,13 @@
+<h1>Featured on Spotify</h1>
+<a class="btn btn-primary" href="<%= new_artist_path %>" role="button" >Add Artist</a>
+
+<div class="card-columns">
+	<% @featured_names.each_with_index do |name, i| %>
+	<div class="card m-3">
+		<%= image_tag @featured_images[i], :class => "card-img-top", :alt => "Artist photo" %>
+		<div class="card-body">
+			<h5 class="card-title"><%= @featured_names[i] %></h5>
+		</div>
+	</div>
+	<% end %>
+</div>
