@@ -1,6 +1,38 @@
-<h1>Featured on Spotify</h1>
-<a class="btn btn-primary" href="<%= new_artist_path %>" role="button" >Add Artist</a>
+<% if @current_user.present? %>
+	<h1>Your Artists</h1>
+	<%= form_for @artist do |f| %>
+		<div class="form-row align-items-center ">
+			<div class="col-auto">
+				<%= f.label :name, "Artist", :class => "sr-only" %>
+				<%= f.text_field :name, :required => true, :class => "form-control mb-2", :placeholder => "Artist" %>
+			</div>
+			<div class="col-auto">
+				<%= f.submit "Add Artist", :class => 'btn btn-primary mb-2' %>
+			</div>
+		</div>
+	<% end%>
+	<hr>
+	<div class="card-columns">
+		<% @artists_in_db.each_with_index do |name,i| %>
+			<div class="card m-3">
+				<%= image_tag name[:image], :class => "card-img-top", :alt => "Artist photo" %>
+				<div class="card-body">
+					<div class="row align-items-center">
+						<div class="col-md-8">
+							<h5 class="card-title"><%= name[:name] %></h5>
+						</div>
+						<div class="col-md-4">
+							<a href="/artists/<%= name[:id] %>" class="btn btn-secondary mb-2">Open</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+<% end %>
 
+<hr>
+<h1>Featured on Spotify</h1>
 <div class="card-columns">
 	<% @featured_names.each_with_index do |name, i| %>
 	<div class="card m-3">
@@ -11,3 +43,7 @@
 	</div>
 	<% end %>
 </div>
+
+<script>
+  document.querySelector('#artist a').classList.add('active');
+</script>

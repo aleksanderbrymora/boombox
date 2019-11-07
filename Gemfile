@@ -24,6 +24,8 @@ gem 'httparty'
 gem 'rack-cors'
 gem 'rspotify'
 gem 'simple_form'
+gem 'table_print'
+gem 'pg_search'
 
 group :production do
   gem 'rails_12factor'

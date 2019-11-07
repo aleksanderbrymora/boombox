@@ -1,2 +1,29 @@
-<h1>Artists#show</h1>
-<p>Find me in app/views/artists/show.html.erb</p>
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-6">
+      <div class="card-body">
+        <h1 class="card-title"><%= @artist[:name] %></h1>
+        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut harum vitae nobis sit. Eos vel
+          quis unde eligendi praesentium amet alias aperiam molestias sint nostrum soluta doloribus in molestiae facilis
+          corrupti autem, recusandae, aut beatae, est optio illo animi perspiciatis.</p>
+        <% unless @artist.albums.map {|a| a.title} == 0 %>
+          <h5>Albums</h5>
+          <% @artist.albums.each do |album| %>
+            <a href="/albums/<%= album.id %>">
+            <p><%= album.title %></p>
+            </a>
+          <% end %>
+        <% end %>
+        <p class="card-text"><small class="text-muted"><%= @artist[:created_at] %></small></p>
+        <%= button_to "Delete", @artist, :class => "btn btn-outline-danger btn-sm" , :method => 'delete', :data => {:confirm => 'Are you sure?'} %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <%= image_tag @artist[:image], :alt => @artist[:name], :class => "card-img" %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelector('#artist a').classList.add('active');
+</script>

@@ -1,2 +1,29 @@
-<h1>Playlists#show</h1>
-<p>Find me in app/views/playlists/show.html.erb</p>
+<div class="row m-1">
+  <div class="col-md-3">
+    <%= image_tag @playlist[:image], :class => "img-fluid" %>
+    <h1><%= @playlist[:name] %></h1>
+    <p>Created at <%= @playlist[:created_at].strftime("%k:%M %-d-%-m-%Y") %></p>
+    <%= button_to "Delete", @playlist, :class => "btn btn-outline-danger btn-sm" , :method => 'delete', :data => {:confirm => 'Are you sure?'} %>
+  </div>
+  <div class="col-md-9">
+    <h1>Songs</h1>
+    <% @playlist.songs.each do |song| %>
+      <div class="row">
+        <div class="col-11">
+        <p><%= song[:title] %> - <strong> <%= (Artist.find ((Album.find song[:album_id])[:artist_id]))[:name] %></strong></p>
+        </div>
+        <div class="col-1">
+        <%= form_tag update_playlist_path, method: :put do %>
+          <%= hidden_field_tag :song_id, song[:id] %>
+          <%= hidden_field_tag :playlist_id, @playlist[:id] %>
+          <button type="submit" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.querySelector('#playlsit a').classList.add('active');
+</script>

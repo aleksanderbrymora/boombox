@@ -1,2 +1,96 @@
-<h1>Playlists#index</h1>
-<p>Find me in app/views/playlists/index.html.erb</p>
+<% if @current_user.present? %>
+  <h1>Your Playlists</h1>
+  <%= form_for @playlist_new do |f| %>
+		<div class="form-row align-items-center ">
+			<div class="col-auto">
+				<%= f.label :name, "Playlist", :class => "sr-only" %>
+				<%= f.text_field :name, :required => true, :class => "form-control mb-2", :placeholder => "Playlist" %>
+			</div>
+			<div class="col-auto">
+				<%= f.submit "Add Playlist", :class => 'btn btn-primary mb-2' %>
+			</div>
+		</div>
+	<% end%>
+  <hr>
+  <div class="card-columns">
+		<% @playlists.each_with_index do |name,i| %>
+			<div class="card">
+				<%= image_tag name[:image], :class => "card-img-top", :alt => "Artist photo" %>
+				<div class="card-body">
+					<div class="row align-items-center">
+						<div class="col-md-8">
+							<h5 class="card-title"><%= name[:name] %></h5>
+						</div>
+						<div class="col-md-4">
+							<a href="/playlists/<%= name[:id] %>" class="btn btn-secondary mb-2">Open</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+  <% if @songs_rand.count > 0 %>
+    <div class="my-5">
+      <h1>Suggestions from your library</h1>
+      <div class="mt-3">
+        <% @songs_rand.each do |song| %>
+          <div class="row align-items-center">
+          <!-- Listing songs and artists -->
+            <div class="col-md-11">
+              <div class="row">
+                <div class="col-6">
+                  <h5><%= song[:title] %> </h5> 
+                </div>
+                <div class="col-6">
+                  <p> <%= (Artist.find ((Album.find song[:album_id])[:artist_id]))[:name] %> </p>
+                </div>
+              </div>
+            </div>
+          <!-- Adding buttons that trigger a modal with playlist listing -->
+            <div class="col-md-1">
+              <!-- Button to trigger modal -->
+              <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal<%= song[:id] %>">+</button>
+              <!-- A modal with all the playlists -->
+              <div class="modal fade" id="modal<%= song[:id] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Add to Playlists</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <%= form_tag add_songs_path, method: :put do %>
+                      <div class="modal-body">
+                        <% @playlists.each do |playlist| %>
+                          <div class="row">
+                            <%= hidden_field_tag :song_id, song[:id] %>
+                            <div class="col-1">
+                              <%= check_box_tag "playlist_ids[]", playlist.id %>
+                            </div>
+                            <div class="col-11">
+                              <%= playlist.name %>
+                            </div>
+                          </div>
+                        <% end %>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <%= submit_tag "Add", :class => "btn btn-primary" %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+
+<script>
+  document.querySelector('#playlist a').classList.add('active');
+</script>

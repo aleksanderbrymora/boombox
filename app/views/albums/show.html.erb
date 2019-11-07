@@ -1,2 +1,65 @@
-<h1>Albums#show</h1>
-<p>Find me in app/views/albums/show.html.erb</p>
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-8">
+      <%= image_tag @album[:image], :alt => @album[:title], :class => "card-img" %>
+    </div>
+    <div class="col-md-4">
+      <div class="card-body">
+        <h1 class="card-title"><%= @album[:title] %></h1>
+        <div class="my-3">
+        <a href="/artists/<%= @artist[:id] %>">
+          <h5 class="card-text"><%= @artist[:name] %></h5>
+        </a>
+        </div>
+        <div class="card-text">
+          <% @songs.each do |song| %>
+            <div class="row">
+              <div class="col-md-10 m-0">
+                <p><%= song[:title] %></p>
+              </div>
+              <div class="col-1">
+                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal<%= song[:id] %>"><i class="fas fa-plus"></i></button>
+                <!-- A modal with all the playlists -->
+                <div class="modal fade" id="modal<%= song[:id] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add to Playlists</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <%= form_tag add_songs_path, method: :put do %>
+                        <div class="modal-body">
+                          <hr>
+                          <% @playlists.each do |playlist| %>
+                            <%= hidden_field_tag :song_id, song[:id] %>
+                            <%= check_box_tag "playlist_ids[]", playlist.id %>
+                            <%= playlist.name %>
+                            <hr>
+                          <% end %>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <%= submit_tag "Add", :class => "btn btn-primary" %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <p class="card-text"><small class="text-muted">
+          Created at <%= @album[:created_at].strftime("%k:%M %-d-%-m-%Y") %>
+        </small></p>
+        <%= button_to "Delete", @album, :class => "btn btn-outline-danger btn-sm" , :method => 'delete', :data => {:confirm => 'Are you sure?'} %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelector('#album a').classList.add('active');
+</script>
