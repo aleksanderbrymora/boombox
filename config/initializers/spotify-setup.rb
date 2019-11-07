@@ -1,1 +1,1 @@
-RSpotify::authenticate(Rails.application.secrets.spotify_id, Rails.application.secrets.spotify_secret)
+# RSpotify::authenticate(Rails.application.secrets.spotify_id, Rails.application.secrets.spotify_secret)
