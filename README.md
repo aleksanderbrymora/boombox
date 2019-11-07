@@ -46,7 +46,7 @@ Used bootstrap for whole website
 # What I would do differently
 Having a week for a project leaves a pretty small time for correcting an error especially when you see it down the end. That said last two days of the project were mostly spent on patching my old code to work with new features. It wasnt thought through well enough in the beginning.
 Things I would change: 
-- rework a search for artists - have a user choose from a dropdown list exactly which artist they want, not taking the first result from the search in spotify playlist.
+- Rework a search for artists - have a user choose from a dropdown list exactly which artist they want, not taking the first result from the search in spotify playlist.
 - doing the same for the albums search - though this search works much better than the one for artists, because it has more data to work with, it also fails sometimes and adds a random artist
 - I'd start over from scratch and use partials, because code with bootstrap gets sooooo messy and nested. I'd also build the search functions in Spotify first to make sure they are robust and reusable. Which is not the approach I had taken during this project, where I wrote functions sepcific for the views, which led to messy code (though i reworked most of it later)
 - And the main thing - just plan it out better. I wasn't sure most of the way what am I aiming for, the goal wasn't clear. That's where the confusion came from and lack of propper goals lead to lots of waisted time.

@@ -1,64 +1,26 @@
-<h1>Popular on Spotify</h1>
+<h1>Popular on Spotify US</h1>
 
-<div class="card-deck">
-	<div class="card m-3">
-		<%= image_tag @top_images[0], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[0] %></h5>
-			<p class="card-text"><%= @top_names_title[0] %></p>
+<div class="card-columns">
+	<% @featured_names.each_with_index do |name,i| %>
+		<div class="card m-3">
+			<%= image_tag @featured_images[i], :class => "card-img-top", :alt => "Album photo" %>
+			<div class="card-body">
+				<div class="row align-items-center">
+					<div class="col-10">
+						<h5 class="card-title"><%= name %></h5>
+						<p><%= @featured_artist[i] %></p>
+					</div>
+					<div class="col-2">
+						<%= form_tag albums_path do %>
+							<%= hidden_field_tag :title, @featured_names[i] %>
+							<%= hidden_field_tag :artist, @featured_artist[i] %>
+							<%= submit_tag "+", :class => 'btn btn-outline-primary mb-2' %>
+						<% end %>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[1], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[1] %></h5>
-			<p class="card-text"><%= @top_names_title[1] %></p>
-		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[2], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[2] %></h5>
-			<p class="card-text"><%= @top_names_title[2] %></p>
-		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[3], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[3] %></h5>
-			<p class="card-text"><%= @top_names_title[3] %></p>
-		</div>
-	</div>
-</div>
-<div class="card-deck">
-	<div class="card m-3">
-		<%= image_tag @top_images[4], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[4] %></h5>
-			<p class="card-text"><%= @top_names_title[4] %></p>
-		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[5], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[5] %></h5>
-			<p class="card-text"><%= @top_names_title[5] %></p>
-		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[6], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[6] %></h5>
-			<p class="card-text"><%= @top_names_title[6] %></p>
-		</div>
-	</div>
-	<div class="card m-3">
-		<%= image_tag @top_images[7], :class => "card-img-top", :alt => "Artist photo" %>
-		<div class="card-body">
-			<h5 class="card-title"><%= @top_names_artist[7] %></h5>
-			<p class="card-text"><%= @top_names_title[7] %></p>
-		</div>
-	</div>
+	<% end %>
 </div>
 
 <script>
