@@ -1,55 +1,67 @@
 <% if @current_user.present? %>
-	<h1>Your Albums</h1>
-	<%= form_tag albums_path do %>
-		<div class="form-row align-items-center">
-			<div class="col-auto">
-				<%= label_tag :title, "Album", :class => "sr-only" %>
-				<%= text_field_tag :title, nil, :required => true, :class => "form-control mb-2", :placeholder => "Album" %>
-			</div>
-			<div class="col-auto">
-				<%= label_tag :artist, "Artist", :class => "sr-only" %>
-				<%= text_field_tag :artist, nil,:required => true, :class => "form-control mb-2", :placeholder => "Artist" %>
-			</div>
-			<div class="col-auto">
-				<%= submit_tag "Add Album", :class => 'btn btn-primary mb-2' %>
-			</div>
-		</div>
-	<% end%>
-	<hr>
-	<div class="card-columns">
-		<% @albums_in_db.each_with_index do |name,i| %>
-			<div class="card m-3">
-				<%= image_tag name[:image], :class => "card-img-top", :alt => "Album photo" %>
-				<div class="card-body">
-					<div class="row align-items-center">
-						<div class="col-md-8">
-							<h5 class="card-title"><%= name[:title] %></h5>
-							<p class="card-text"><%= (Artist.find name[:artist_id])[:name] %></p>
-						</div>
-						<div class="col-md-4">
-							<a href="/albums/<%= name[:id] %>" class="btn btn-secondary mb-2">Open</a>
-						</div>
-					</div>
+<h1>Your Albums</h1>
+<%= form_tag albums_path do %>
+<div class="form-row align-items-center">
+	<div class="col-auto">
+		<%= label_tag :title, "Album", :class => "sr-only" %>
+		<%= text_field_tag :title, nil, :required => true, :class => "form-control mb-2", :placeholder => "Album" %>
+	</div>
+	<div class="col-auto">
+		<%= label_tag :artist, "Artist", :class => "sr-only" %>
+		<%= text_field_tag :artist, nil,:required => true, :class => "form-control mb-2", :placeholder => "Artist" %>
+	</div>
+	<div class="col-auto">
+		<%= submit_tag "Add Album", :class => 'btn btn-primary mb-2' %>
+	</div>
+</div>
+<% end%>
+<hr>
+<div class="card-columns">
+	<% @albums_in_db.each_with_index do |name,i| %>
+	<div class="card m-3">
+		<%= image_tag name[:image], :class => "card-img-top", :alt => "Album photo" %>
+		<div class="card-body">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<h5 class="card-title"><%= name[:title] %></h5>
+					<p class="card-text"><%= (Artist.find name[:artist_id])[:name] %></p>
+				</div>
+				<div class="col-md-4">
+					<a href="/albums/<%= name[:id] %>" class="btn btn-secondary mb-2">Open</a>
 				</div>
 			</div>
-		<% end %>
+		</div>
 	</div>
+	<% end %>
+</div>
 <% end %>
 
 
 <hr>
 <h1>Featured on Spotify</h1>
-	<div class="card-columns">
-		<% @featured_names.each_with_index do |name,i| %>
+<div class="card-columns">
+	<% @featured_names.each_with_index do |name,i| %>
 		<div class="card m-3">
 			<%= image_tag @featured_images[i], :class => "card-img-top", :alt => "Album photo" %>
 			<div class="card-body">
-				<h5 class="card-title"><%= name %></h5>
+				<div class="row align-items-center">
+					<div class="col-10">
+						<h5 class="card-title"><%= name %></h5>
+						<p><%= @featured_artist[i] %></p>
+					</div>
+					<div class="col-2">
+						<%= form_tag albums_path do %>
+							<%= hidden_field_tag :title, @featured_names[i] %>
+							<%= hidden_field_tag :artist, @featured_artist[i] %>
+							<%= submit_tag "+", :class => 'btn btn-outline-primary mb-2' %>
+						<% end %>
+					</div>
+				</div>
 			</div>
 		</div>
-		<% end %>
-	</div>
+	<% end %>
+</div>
 
 <script>
-  document.querySelector('#album a').classList.add('active');
+	document.querySelector('#album a').classList.add('active');
 </script>

@@ -1,19 +1,64 @@
 class ApplicationController < ActionController::Base
 	before_action :fetch_user
 
-	# returns full info, name, photo
-	def s_artist album
-		artist_data = {:full => nil, :name => nil, :image => nil}
+	######### Featured stuff ############################
+	# Returns top 12 songs from popular playlist
+	def featured_tracks
+		RSpotify::Playlist.search('top')[0...12].sample.tracks[0...12]
+	end
 
-		if album.present?
-			artist_data[:full] = album[:full].artists.first
+	def featured_albums
+		album_data = {:title => nil, :image => nil, :artist => nil}
+		tracks = featured_tracks
+		album_data[:title] = tracks.map {|t| t.album.name}
+		album_data[:image] = tracks.map {|t| t.album.images.first["url"]}
+		album_data[:artist] = tracks.map {|t| t.artists.first.name}
+		return album_data
+	end
+
+	def featured_artists
+		artist_data = {:name => nil, :image => nil}
+		tracks = featured_tracks
+		artist_data[:name] = tracks.map {|t| t.artists.first.name}
+		artist_data[:image] = tracks.map {|t| t.artists.first.images.first["url"]}
+		return artist_data
+	end
+
+	# TODO Function that 
+	## loops through all results for an artist
+	## checks if passed album is present inside
+	### If not goes into another artist untill it finds him
+	# Returns Artist's and album's spotify id
+
+	def s_find_album_artist artist_name, album_name
+		album_data = {:album_id => nil, :artist_id => nil}
+		artists = RSpotify::Artist.search(artist_name)
+		artists.each do |artist|
+			artist.albums.each do |album| 
+				if album.name.downcase.tr('^A-Za-z', '') == album_name.downcase.tr('^A-Za-z', '')
+					album_data[:album_id] = album.id
+					album_data[:artist_id] = artist.id
+					break
+				end
+			end
 		end
-		
+		return album_data
+	end
+
+	# returns full info, name, photo
+	def s_artist id
+		artist_data = {:full => nil, :name => nil, :image => nil}
+		artist_data[:full] = RSpotify::Artist.find(id)
 		unless artist_data[:full] == nil
 			artist_data[:name] = artist_data[:full].name
-			artist_data[:image] = (RSpotify::Artist.find(artist_data[:full].id)).images.first["url"]
+			artist_data[:image] = artist_data[:full].images.first["url"]
 		end
-		artist_data
+		return artist_data
+	end
+
+	def s_artist_find name
+		artist_id = (RSpotify::Artist.search(name)).first.id
+		s_artist artist_id
 	end
 
 	# returns isPresent in db and where for artist
@@ -23,27 +68,19 @@ class ApplicationController < ActionController::Base
 	
 	# returns isPresent in db and where for album
 	def db_album name
-
 		Album.find_by :title => name
 	end
 
 	# returns necesary album info
-	def s_album name
+	def s_album id
 		album_data = {:full => nil, :name => nil, :image => nil, :tracks => nil}
-
-		unless name == ""
-			album = RSpotify::Album.search(name)
-			if album.length > 0
-				album_data[:full] = album.first
-			end
-		end
-
-		unless album_data == nil
+		album_data[:full] = RSpotify::Album.find(id)
+		unless album_data[:full] == nil
 			album_data[:name] = album_data[:full].name
 			album_data[:image] = album_data[:full].images.first["url"]
 			album_data[:tracks] = album_data[:full].tracks.map {|t| t.name}
 		end
-		album_data
+		return album_data
 	end
 
 	# adding tracks to the album
@@ -67,8 +104,9 @@ class ApplicationController < ActionController::Base
 		artist_name.downcase!
 		# checking if album is present in the db
 		unless db_album album_name == nil
-			album = s_album album_name
-			artist = s_artist album
+			album_data = s_find_album_artist artist_name, album_name
+			album = s_album album_data[:album_id]
+			artist = s_artist album_data[:artist_id]
 			# checking if search for Artist succeeded
 			unless artist[:full] == nil
 				artist_db = db_artist artist[:name]

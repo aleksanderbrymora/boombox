@@ -1,7 +1,10 @@
 class AlbumsController < ApplicationController
   def index
-    @featured_names = RSpotify::Playlist.search('Australia viral 50').first.tracks.map {|t| t.album.name}[0...1]
-    @featured_images = @featured_names.map {|artist| RSpotify::Album.search(artist).first.images.first["url"]}
+    album_data = featured_albums
+    @featured_tracks = album_data[:title]
+    @featured_names = album_data[:title]
+    @featured_images = album_data[:image]
+    @featured_artist = album_data[:artist]
     @albums_in_db = Album.all
     @album = Album.new
   end

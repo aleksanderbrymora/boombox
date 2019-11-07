@@ -1,20 +1,23 @@
 class ArtistsController < ApplicationController
   def index
-    @featured_names = RSpotify::Playlist.search('Australia top 50').first.tracks.map {|t| t.artists.first.name}[0...1]
-    @featured_images = @featured_names.map {|artist| RSpotify::Artist.search(artist).first.images.first["url"]}
+    artist_data = featured_artists
+    @featured_names = artist_data[:name]
+    @featured_images = artist_data[:image]
     @artists_in_db = Artist.all
     @artist = Artist.new
     @albums = @artist.albums.map {|a| a.title}
   end
 
   def create
-    if artist_params.permitted?
-      artist_data = s_artist artist_params["name"]
-      name = artist_data[:name]
+    artist_data = s_artist_find params[:name]
+    name = artist_data[:name]
+    if Artist.find_by :name => name 
+      redirect_to Artist.find_by :name => name 
+    else
       image = artist_data[:image]
       artist = Artist.create :name => name, :image => image
+      redirect_to artist
     end
-    redirect_to artist
   end
 
   def show
@@ -31,8 +34,8 @@ class ArtistsController < ApplicationController
     redirect_to artists_path
   end
 
-  private
-  def artist_params
-    params.require(:artist).permit(:name)
-  end
+  # private
+  # def artist_params
+  #   params.require(:artist).permit(:name)
+  # end
 end
