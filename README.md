@@ -2,6 +2,10 @@
 
 [Deployed website](https://boomboxv2-unique.herokuapp.com/)
 
+## Showcase
+
+![Showcase](https://images.ctfassets.net/02g4788riobs/2QiuJoSBtxJGJwX6Sp5Ebp/201155b3cbb8024057fb34b823eff14e/Boombox.gif)
+
 For this project I have created a database to store albums, artists and songs given by user. I utilised Spotify's API to get data and images into my database.
 
 I have 5 models which include:
