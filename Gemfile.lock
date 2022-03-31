@@ -129,7 +129,8 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     public_suffix (3.1.1)
-    puma (3.12.4)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -244,7 +245,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
   pg_search
-  puma (~> 3.12)
+  puma (~> 4.3)
   rack-cors
   rails (~> 6.0.0)
   rails_12factor
